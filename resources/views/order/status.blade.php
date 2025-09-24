@@ -32,7 +32,7 @@
 <body class="min-h-screen">
     <div class="container mx-auto px-4 py-8">
         <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-red-600 mb-2">ORDER STATUS</h1>
+            <h1 class="text-3xl font-bold text-red-600 mb-2">ORDER STATUS INI</h1>
             <p class="text-gray-600">Order #{{ $order->order_number }}</p>
         </div>
 
