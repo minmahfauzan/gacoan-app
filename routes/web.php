@@ -39,6 +39,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Koki Panel Routes
+Route::prefix('koki')->group(function () {
+    Route::get('/', [App\Http\Controllers\KokiController::class, 'index'])->name('koki.index');
+    Route::post('order-items/{orderItem}/mark-made', [App\Http\Controllers\KokiController::class, 'markItemMade'])->name('koki.order-items.mark-made');
+    Route::post('orders/{order}/mark-ready', [App\Http\Controllers\KokiController::class, 'markOrderReady'])->name('koki.orders.mark-ready');
+});
+
 Route::get('products/images/{filename}', function ($filename) {
     $path = 'products/' . $filename;
 

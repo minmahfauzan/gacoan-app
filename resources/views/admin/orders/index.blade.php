@@ -239,6 +239,29 @@
                     break;
             }
         }
+
+        // Laravel Echo for real-time updates
+        window.Echo.channel('orders')
+            .listen('.order.updated', (e) => {
+                console.log('Admin: Order updated via Echo:', e.order);
+                const orderId = e.order.id;
+                const newStatus = e.order.status;
+                const orderRow = $(`tr:has(select[data-order-id="${orderId}"])`);
+                if (orderRow.length) {
+                    const statusSelect = orderRow.find('.status-select');
+                    statusSelect.val(newStatus);
+                    statusSelect.data('current-status', newStatus);
+                    updateStatusClass(statusSelect, newStatus);
+                }
+            });
+
+        window.Echo.channel('order-items')
+            .listen('.order-item.updated', (e) => {
+                console.log('Admin: Order item updated via Echo:', e.order_item);
+                // If an order item status changes, and it affects the parent order status,
+                // the OrderUpdated event will handle the overall order status change.
+                // This listener is mainly for debugging or if you want to show item-level status in admin.
+            });
     });
 </script>
 @endsection

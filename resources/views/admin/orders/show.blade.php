@@ -23,7 +23,7 @@
                 @endif
                 <div class="flex">
                     <span class="w-32 text-gray-600">Status:</span>
-                    <span class="font-medium capitalize">{{ $order->status }}</span>
+                    <span id="order-status-display" class="font-medium capitalize">{{ $order->status }}</span>
                 </div>
                 <div class="flex">
                     <span class="w-32 text-gray-600">Ordered At:</span>
@@ -61,15 +61,17 @@
                         <th class="text-right py-2">Qty</th>
                         <th class="text-right py-2">Price</th>
                         <th class="text-right py-2">Total</th>
+                        <th class="text-right py-2">Status</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="order-items-list">
                     @foreach($order->orderItems as $item)
-                    <tr>
+                    <tr id="order-item-row-{{ $item->id }}">
                         <td class="py-2">{{ $item->product->name }}</td>
                         <td class="text-right py-2">{{ $item->quantity }}</td>
                         <td class="text-right py-2">Rp{{ number_format($item->price, 0, ',', '.') }}</td>
                         <td class="text-right py-2 font-medium">Rp{{ number_format($item->total, 0, ',', '.') }}</td>
+                        <td class="text-right py-2 capitalize" id="order-item-status-{{ $item->id }}">{{ $item->status }}</td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -77,3 +79,32 @@
         </div>
     </div>
 </div>
+
+<script type="module">
+    document.addEventListener('DOMContentLoaded', function () {
+        const orderId = {{ $order->id }};
+        const orderStatusDisplay = document.getElementById('order-status-display');
+        const orderItemsList = document.getElementById('order-items-list');
+
+        // Listen for overall order updates
+        window.Echo.channel('orders')
+            .listen('.order.updated', (e) => {
+                if (e.order.id === orderId) {
+                    console.log('Admin Modal: Order updated via Echo:', e.order);
+                    orderStatusDisplay.textContent = e.order.status.charAt(0).toUpperCase() + e.order.status.slice(1);
+                }
+            });
+
+        // Listen for individual order item updates
+        window.Echo.channel('order-items')
+            .listen('.order-item.updated', (e) => {
+                if (e.order_item.order_id === orderId) {
+                    console.log('Admin Modal: Order item updated via Echo:', e.order_item);
+                    const itemStatusDisplay = document.getElementById(`order-item-status-${e.order_item.id}`);
+                    if (itemStatusDisplay) {
+                        itemStatusDisplay.textContent = e.order_item.status.charAt(0).toUpperCase() + e.order_item.status.slice(1);
+                    }
+                }
+            });
+    });
+</script>

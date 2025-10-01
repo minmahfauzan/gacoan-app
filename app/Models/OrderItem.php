@@ -15,6 +15,7 @@ class OrderItem extends Model
         'quantity',
         'price',
         'total',
+        'status',
     ];
 
     // Relationship with order
