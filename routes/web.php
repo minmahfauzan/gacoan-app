@@ -5,6 +5,8 @@ use App\Http\Controllers\Auth\TableAuthController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Response;
 
 // Include admin routes
 require __DIR__.'/admin.php';
@@ -13,6 +15,8 @@ require __DIR__.'/admin.php';
 Route::get('/table/login', [TableAuthController::class, 'showLoginForm'])->name('table.auth.login');
 Route::post('/table/login', [TableAuthController::class, 'login'])->name('table.auth.login');
 Route::post('/table/logout', [TableAuthController::class, 'logout'])->name('table.auth.logout');
+
+Route::get('/table-login/qr', [TableAuthController::class, 'loginWithQr'])->name('table.login.qr');
 
 // Protected Routes (Table Auth Required)
 Route::middleware(['table.auth'])->group(function () {
@@ -34,3 +38,19 @@ Route::middleware(['table.auth'])->group(function () {
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('products/images/{filename}', function ($filename) {
+    $path = 'products/' . $filename;
+
+    if (!Storage::exists($path)) {
+        abort(404);
+    }
+
+    $file = Storage::get($path);
+    $type = Storage::mimeType($path);
+
+    $response = Response::make($file, 200);
+    $response->header("Content-Type", $type);
+
+    return $response;
+})->name('products.image');

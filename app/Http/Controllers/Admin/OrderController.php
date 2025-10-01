@@ -16,6 +16,13 @@ class OrderController extends Controller
                        
         return view('admin.orders.index', compact('orders'));
     }
+
+    public function show($id)
+    {
+        $order = Order::with(['table', 'orderItems.product'])->findOrFail($id);
+
+        return view('admin.orders.show', compact('order'));
+    }
     
     public function updateStatus(Request $request, $id)
     {

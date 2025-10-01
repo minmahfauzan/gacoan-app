@@ -12,6 +12,16 @@
                     <span class="font-medium">{{ $order->table->table_number }}</span>
                 </div>
                 <div class="flex">
+                    <span class="w-32 text-gray-600">Nama Pemesan:</span>
+                    <span class="font-medium">{{ $order->nama_pemesan }}</span>
+                </div>
+                @if($order->keterangan)
+                <div class="flex">
+                    <span class="w-32 text-gray-600">Keterangan:</span>
+                    <span class="font-medium">{{ $order->keterangan }}</span>
+                </div>
+                @endif
+                <div class="flex">
                     <span class="w-32 text-gray-600">Status:</span>
                     <span class="font-medium capitalize">{{ $order->status }}</span>
                 </div>

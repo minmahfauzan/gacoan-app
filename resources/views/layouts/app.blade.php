@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,6 +20,7 @@
         }
     </style>
 </head>
+
 <body class="min-h-screen flex flex-col">
     <div id="notification-banner" class="hidden bg-green-500 text-white text-center py-2 fixed top-0 w-full z-50"></div>
     @include('layouts.partials.navbar')
@@ -27,4 +29,5 @@
     </div>
     @yield('scripts')
 </body>
+
 </html>

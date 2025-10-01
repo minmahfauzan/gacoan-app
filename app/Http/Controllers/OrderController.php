@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewOrder;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
@@ -14,6 +15,11 @@ class OrderController extends Controller
 {
     public function store(Request $request)
     {
+        $request->validate([
+            'nama_pemesan' => 'required|string|max:255',
+            'keterangan' => 'nullable|string',
+        ]);
+
         $cart = Session::get('cart', []);
         
         if (empty($cart)) {
@@ -33,6 +39,8 @@ class OrderController extends Controller
             $order = Order::create([
                 'order_number' => 'ORD-' . strtoupper(uniqid()),
                 'table_id' => $tableId,
+                'nama_pemesan' => $request->nama_pemesan,
+                'keterangan' => $request->keterangan,
                 'total_amount' => array_sum(array_map(fn($item) => $item['price'] * $item['quantity'], $cart)),
                 'status' => 'pending'
             ]);
@@ -52,6 +60,8 @@ class OrderController extends Controller
             Session::forget('cart');
             
             DB::commit();
+
+            NewOrder::dispatch($order);
             
             return redirect()->route('order.status', $order->id)
                            ->with('success', 'Order placed successfully!');

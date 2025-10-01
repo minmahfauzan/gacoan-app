@@ -12,6 +12,8 @@ class Order extends Model
     protected $fillable = [
         'order_number',
         'table_id',
+        'nama_pemesan',
+        'keterangan',
         'total_amount',
         'status',
         'completed_at',

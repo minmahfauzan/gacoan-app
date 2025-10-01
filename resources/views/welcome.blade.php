@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to Gacoan</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    {{-- <script src="https://cdn.tailwindcss.com"></script> --}}
+    @vite('resources/css/app.css')
+    @vite('resources/js/app.js')
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -13,11 +16,13 @@
         }
     </style>
 </head>
+
 <body class="min-h-screen flex items-center justify-center">
     <div class="text-center">
         <h1 class="text-5xl font-bold text-red-600 mb-4">GACOAN</h1>
         <p class="text-xl text-gray-700 mb-8">Authentic Indonesian Spicy Food Experience</p>
-        <a href="{{ route('table.auth.login') }}" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-full text-lg transition duration-300 transform hover:scale-105">
+        <a href="{{ route('table.auth.login') }}"
+            class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-full text-lg transition duration-300 transform hover:scale-105">
             Enter Restaurant
         </a>
         <div class="mt-8">
@@ -25,4 +30,5 @@
         </div>
     </div>
 </body>
+
 </html>

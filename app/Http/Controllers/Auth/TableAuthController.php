@@ -39,4 +39,26 @@ class TableAuthController extends Controller
         Session::forget(['table_id', 'table_number']);
         return redirect()->route('table.auth.login');
     }
+
+    public function loginWithQr(Request $request)
+    {
+        $tableNumber = $request->query('table_number');
+
+        if (!$tableNumber) {
+            return redirect()->route('table.auth.login')->withErrors(['error' => 'Invalid QR Code.']);
+        }
+
+        $table = TableModel::where('table_number', $tableNumber)
+                          ->where('is_active', true)
+                          ->first();
+
+        if (!$table) {
+            return redirect()->route('table.auth.login')->withErrors(['error' => 'Table not found or not active.']);
+        }
+
+        Session::put('table_id', $table->id);
+        Session::put('table_number', $table->table_number);
+
+        return redirect()->route('menu.index');
+    }
 }
