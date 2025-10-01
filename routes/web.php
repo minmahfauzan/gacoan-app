@@ -46,6 +46,12 @@ Route::prefix('koki')->group(function () {
     Route::post('orders/{order}/mark-ready', [App\Http\Controllers\KokiController::class, 'markOrderReady'])->name('koki.orders.mark-ready');
 });
 
+// Pelayan Panel Routes
+Route::prefix('pelayan')->group(function () {
+    Route::get('/', [App\Http\Controllers\PelayanController::class, 'index'])->name('pelayan.index');
+    Route::post('orders/{order}/mark-served', [App\Http\Controllers\PelayanController::class, 'markOrderServed'])->name('pelayan.orders.mark-served');
+});
+
 Route::get('products/images/{filename}', function ($filename) {
     $path = 'products/' . $filename;
 
